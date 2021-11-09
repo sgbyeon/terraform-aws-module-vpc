@@ -18,14 +18,14 @@ resource "aws_internet_gateway" "this" {
 # eip for nat gateway
 resource "aws_eip" "nat" {
   vpc = true
-  count = length(var.nat_gateway_subnets)
+  count = length(var.azs)
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-eip", var.prefix, var.vpc_name, var.azs[count.index])}))
 }
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
-  count = length(var.nat_gateway_subnets)
+  count = length(var.az)
   allocation_id = aws_eip.nat.*.id[count.index]
   subnet_id = aws_subnet.natgw.*.id[count.index]
   
@@ -39,7 +39,7 @@ resource "aws_nat_gateway" "this" {
 # nat gateway public route table
 resource "aws_route_table" "natgw" {
   vpc_id = aws_vpc.this.id
-  count = length(var.nat_gateway_subnets)
+  count = length(var.azs)
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -51,7 +51,7 @@ resource "aws_route_table" "natgw" {
 
 # nat gateway route table association
 resource "aws_route_table_association" "natgw" {
-  count = length(var.nat_gateway_subnets)
+  count = length(var.azs)
 
   subnet_id = aws_subnet.natgw.*.id[count.index]
   route_table_id = aws_route_table.natgw.*.id[count.index]
