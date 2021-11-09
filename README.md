@@ -54,7 +54,6 @@ module "vpc" {
   region = var.region
   vpc_name = var.vpc_name
   vpc_cidr = var.vpc_cidr
-  vpc_secondary_cidr = var.vpc_secondary_cidr
   azs = var.azs
   nat_gateway_subnets = var.nat_gateway_subnets
   subnets = var.subnets

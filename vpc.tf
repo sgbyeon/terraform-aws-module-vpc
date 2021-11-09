@@ -12,10 +12,6 @@ resource "aws_vpc" "this" {
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
-  depends_on = [
-    aws_vpc_ipv4_cidr_block_association.this
-  ]
-
   tags = merge(var.tags, tomap({Name = format("%s-%s-igw", var.prefix, var.vpc_name)}))
 }
 
