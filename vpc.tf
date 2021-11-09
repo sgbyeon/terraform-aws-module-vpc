@@ -40,7 +40,7 @@ resource "aws_nat_gateway" "sn1" {
 resource "aws_nat_gateway" "sn2" {
   for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
   allocation_id = aws_eip.nat[1]
-  subnet_id = aws_subnet.sn1[each.value].id
+  subnet_id = aws_subnet.sn2[each.value].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -74,7 +74,7 @@ resource "aws_route_table_association" "natgw_sn1" {
 resource "aws_route_table_association" "natgw_sn2" {
   for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
 
-  subnet_id = aws_subnet.sn1[each.value].id
+  subnet_id = aws_subnet.sn2[each.value].id
   route_table_id = aws_route_table.natgw[1]
 }
 
