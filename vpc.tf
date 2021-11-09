@@ -23,17 +23,6 @@ resource "aws_eip" "nat" {
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-eip", var.prefix, var.vpc_name, var.azs[count.index])}))
 }
 
-# nat gateway subnets
-resource "aws_subnet" "natgw" {
-  count = length(var.nat_gateway_subnets)
-
-  vpc_id = aws_vpc.this.id
-  cidr_block = var.nat_gateway_subnets[count.index]
-  availability_zone = var.azs[count.index]
-
-  tags = merge(var.tags, tomap({Name = format("%s-%s-public-%s-natgw-sn", var.prefix, var.vpc_name, var.azs[count.index])}))
-}
-
 # nat gateway
 resource "aws_nat_gateway" "this" {
   count = length(var.nat_gateway_subnets)

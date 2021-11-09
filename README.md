@@ -1,6 +1,8 @@
 # AWS VPC Terraform custom module
 * AWS 에서 VPC 리소스를 생성하는 커스텀 모듈
+* 가장 기본 형태의 3-Tier 구조의 VPC 생성
 * subnet을 생성 시 map of map 방식을 사용
+* NAT gateway 기본 enable
 
 ## Usage
 
@@ -19,8 +21,6 @@ tags = {
     "CreatedByTerraform" = "true"
 }
 
-nat_gateway_subnets = ["10.10.0.0/24", "10.10.10.0/24"]
-
 subnets = {
   "bastion" = {
     "cidr" = ["10.10.0.0/24", "10.10.10.0/24"]
@@ -35,7 +35,7 @@ subnets = {
   "was" = {
     "cidr" = ["10.10.40.0/24", "10.10.50.0/24"]
     "ipv4_type" = ["private"]
-    "ngw_attach" = ["disable"]
+    "ngw_attach" = ["enable"]
   },
   "rds" = {
     "cidr" = ["10.10.60.0/24", "10.10.60.0/24"]
