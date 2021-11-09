@@ -19,11 +19,6 @@ variable "vpc_cidr" {
   type = string
 }
 
-variable "vpc_secondary_cidr" {
-  description = "IPv4 CIDR block"
-  type = string
-}
-
 variable "azs" {
   description = "Availability Zone List"
   type = list

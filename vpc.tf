@@ -8,16 +8,6 @@ resource "aws_vpc" "this" {
   tags = merge(var.tags, tomap({"Name" = format("%s-%s", var.prefix, var.vpc_name)}))
 }
 
-# vpc secondary cidr
-resource "aws_vpc_ipv4_cidr_block_association" "this" {
-  vpc_id = aws_vpc.this.id
-  cidr_block = var.vpc_secondary_cidr
-
-  depends_on = [
-    aws_vpc.this
-  ]
-}
-
 # internet gateway
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id

@@ -8,11 +8,6 @@ output "vpc_cidr_block" {
   value = aws_vpc.this.cidr_block
 }
 
-output "vpc_secondary_cidr_block" {
-  description = "CIDR block for VPC"
-  value = aws_vpc_ipv4_cidr_block_association.this.cidr_block
-}
-
 output "sn1_subnet_ids" {
   description = "Subnet ID List"
   value = [aws_subnet.sn1]
