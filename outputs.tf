@@ -25,12 +25,12 @@ output "igw_id" {
 
 output "sn1_natgw_id" {
   description = "Nat Gateway ID"
-  value = [aws_nat_gateway.this[0].id]
+  value = [aws_nat_gateway.sn1]
 }
 
 output "sn2_natgw_id" {
   description = "Nat Gateway ID"
-  value = [aws_nat_gateway.this[1].id]
+  value = [aws_nat_gateway.sn2]
 }
 
 output "sn1_public_route_table_ids" {

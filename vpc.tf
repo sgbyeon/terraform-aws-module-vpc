@@ -87,7 +87,7 @@ resource "aws_subnet" "sn1" {
   availability_zone = var.azs[0]
 
   depends_on = [
-    aws_nat_gateway.this
+    aws_nat_gateway.sn1
   ]
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
@@ -102,7 +102,7 @@ resource "aws_subnet" "sn2" {
   availability_zone = var.azs[1]
 
   depends_on = [
-    aws_nat_gateway.this
+    aws_nat_gateway.sn2
   ]
 
   tags = merge(var.tags,tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
@@ -157,7 +157,7 @@ resource "aws_route_table" "natgw_attach_sn1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.this[0].id
+    gateway_id = aws_nat_gateway.sn1
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
@@ -170,7 +170,7 @@ resource "aws_route_table" "natgw_attach_sn2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.this[1].id
+    gateway_id = aws_nat_gateway.sn2
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
