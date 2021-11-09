@@ -86,10 +86,6 @@ resource "aws_subnet" "sn1" {
   cidr_block = var.subnets[each.value].cidr[0]
   availability_zone = var.azs[0]
 
-  depends_on = [
-    aws_nat_gateway.sn1
-  ]
-
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
 }
 
@@ -100,10 +96,6 @@ resource "aws_subnet" "sn2" {
   for_each = toset(keys({ for k, v in var.subnets : k => v }))
   cidr_block = var.subnets[each.value].cidr[1]
   availability_zone = var.azs[1]
-
-  depends_on = [
-    aws_nat_gateway.sn2
-  ]
 
   tags = merge(var.tags,tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
 }
