@@ -2,7 +2,8 @@
 * AWS 에서 VPC 리소스를 생성하는 커스텀 모듈
 * 가장 기본 형태의 3-Tier 구조의 VPC 생성
 * subnet을 생성 시 map of map 방식을 사용
-* NAT gateway 기본 enable
+* NAT gateway 기본 enable 이며, AZ당 생성
+* AZ 2개만 지원
 
 ## Usage
 
@@ -10,16 +11,17 @@
 * 모든 변수는 적절하게 변경하여 사용
 ```
 account_id = ["123456789012"] # 아이디 변경 필수
-region = "ap-northeast-2"
-prefix = "bsg"
-vpc_name = "test-vpc" # 최종 VPC 이름: 'prefix'-'vpc_name'
+region = "ap-northeast-2" # 적절하게 변경
+prefix = "bsg" # 적절하게 변경
+vpc_name = "test-vpc" # 최종 VPC 이름: 'prefix'-'vpc_name', 적절하게 변경
 vpc_cidr = "10.10.0.0/16" # 적절하게 변경
-azs = ["ap-northeast-2a", "ap-northeast-2c"]
+azs = ["ap-northeast-2a", "ap-northeast-2c"] # AZ 2개만 지원, 변경은 가능
 
 # 서브넷 맵에 natgw 필수, 이름 변경 불가
 # natgw는 AZ 당 하나 씩 생성
+# 서브넷은 추가 가능
 subnets = {
-  "natgw" = { # 필수!!
+  "natgw" = { # 필수, 제거하거나 이름을 바꾸면 오류 발생, cidr만 변경 가능
     "cidr" = ["10.10.0.0/24", "10.10.10.0/24"]
     "ipv4_type" = ["public"]
     "natgw_enable" = ["no"]
@@ -34,13 +36,14 @@ subnets = {
     "ipv4_type" = ["private"]
     "natgw_enable" = ["yes"] # natgw 라우팅 테이블 추가
   },
-  "rds" = {
+  "db" = {
     "cidr" = ["10.10.60.0/24", "10.10.70.0/24"]
     "ipv4_type" = ["private"]
     "natgw_enable" = ["no"]
   }
 }
 
+# 공통 tag, 생성되는 모든 리소스에 태깅
 tags = {
     "CreatedByTerraform" = "true"
 }
