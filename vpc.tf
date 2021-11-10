@@ -149,7 +149,7 @@ resource "aws_route_table" "natgw_attach_sn1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.sn1.id
+    gateway_id = aws_nat_gateway.sn1[0].id
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
@@ -162,7 +162,7 @@ resource "aws_route_table" "natgw_attach_sn2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.sn2.id
+    gateway_id = aws_nat_gateway.sn2[0].id
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
