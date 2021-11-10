@@ -2,6 +2,7 @@
 * AWS 에서 VPC 리소스를 생성하는 커스텀 모듈
 * 가장 기본 형태의 3-Tier 구조의 VPC 생성
 * subnet을 생성 시 map of map 방식을 사용
+* subnet을 가변적으로 늘리고 줄일 수 있는 구조
 * NAT gateway 기본 enable 이며, AZ당 생성
 * AZ 2개만 지원
 
