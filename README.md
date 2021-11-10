@@ -131,11 +131,6 @@ variable "tags" {
   type = map(string)
 }
 
-variable "nat_gateway_subnets" {
-  description = " NAT Gateway Subnets List"
-  type = list
-}
-
 variable "subnets" {
   type = map(map(any))
 }
