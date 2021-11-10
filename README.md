@@ -12,36 +12,37 @@
 account_id = ["123456789012"] # 아이디 변경 필수
 region = "ap-northeast-2"
 prefix = "bsg"
-vpc_name = "test-vpc" # 최종 VPC 이름: bsg-test-vpc
+vpc_name = "test-vpc" # 최종 VPC 이름: 'prefix'-'vpc_name'
 vpc_cidr = "10.10.0.0/16" # 적절하게 변경
-vpc_secondary_cidr = "" # 필요 시 입력
 azs = ["ap-northeast-2a", "ap-northeast-2c"]
 
-tags = {
-    "CreatedByTerraform" = "true"
-}
-
+# 서브넷 맵에 natgw 필수, 이름 변경 불가
+# natgw는 AZ 당 하나 씩 생성
 subnets = {
-  "bastion" = {
+  "natgw" = { # 필수!!
     "cidr" = ["10.10.0.0/24", "10.10.10.0/24"]
     "ipv4_type" = ["public"]
-    "ngw_attach" = ["disable"]
+    "natgw_enable" = ["no"]
   },
   "web" = {
     "cidr" = ["10.10.20.0/24", "10.10.30.0/24"]
     "ipv4_type" = ["private"]
-    "ngw_attach" = ["disable"]
+    "natgw_enable" = ["no"]
   },
   "was" = {
     "cidr" = ["10.10.40.0/24", "10.10.50.0/24"]
     "ipv4_type" = ["private"]
-    "ngw_attach" = ["enable"]
+    "natgw_enable" = ["yes"] # natgw 라우팅 테이블 추가
   },
   "rds" = {
-    "cidr" = ["10.10.60.0/24", "10.10.60.0/24"]
+    "cidr" = ["10.10.60.0/24", "10.10.70.0/24"]
     "ipv4_type" = ["private"]
-    "ngw_attach" = ["disable"]
+    "natgw_enable" = ["no"]
   }
+}
+
+tags = {
+    "CreatedByTerraform" = "true"
 }
 ```
 ---
