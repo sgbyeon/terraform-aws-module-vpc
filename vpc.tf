@@ -47,35 +47,6 @@ resource "aws_nat_gateway" "sn2" {
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-natgw", var.prefix, var.vpc_name, var.azs[1])}))
 }
 
-# nat gateway public route table
-resource "aws_route_table" "natgw" {
-  vpc_id = aws_vpc.this.id
-  count = length(var.azs)
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
-  }
-
-  tags = merge(var.tags, tomap({Name = format("%s-%s-public-%s-natgw-rt", var.prefix, var.vpc_name, var.azs[count.index])}))
-}
-
-# nat gateway route table association for sn1
-resource "aws_route_table_association" "natgw_sn1" {
-  for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
-
-  subnet_id = aws_subnet.sn1[each.value].id
-  route_table_id = aws_route_table.natgw[0]
-}
-
-# nat gateway route table association for sn2
-resource "aws_route_table_association" "natgw_sn2" {
-  for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
-
-  subnet_id = aws_subnet.sn2[each.value].id
-  route_table_id = aws_route_table.natgw[1]
-}
-
 # dynamic subnet 1 (sn1)
 resource "aws_subnet" "sn1" {
   vpc_id = aws_vpc.this.id
@@ -84,7 +55,7 @@ resource "aws_subnet" "sn1" {
   cidr_block = var.subnets[each.value].cidr[0]
   availability_zone = var.azs[0]
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.azs[0], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic subnet 2 (sn2)
@@ -95,7 +66,7 @@ resource "aws_subnet" "sn2" {
   cidr_block = var.subnets[each.value].cidr[1]
   availability_zone = var.azs[1]
 
-  tags = merge(var.tags,tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.azs[1], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic public route table for sn1
@@ -108,7 +79,7 @@ resource "aws_route_table" "public_sn1" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[0], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic public route table for sn2
@@ -121,7 +92,7 @@ resource "aws_route_table" "public_sn2" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[1], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic private route table for sn1
@@ -129,7 +100,7 @@ resource "aws_route_table" "private_sn1" {
   vpc_id = aws_vpc.this.id
   for_each = toset(keys({ for k, v in var.subnets : k => v if v.ipv4_type[0] == "private" && v.natgw_enable[0] == "no" }))
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[0], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic private route table for sn2
@@ -137,7 +108,7 @@ resource "aws_route_table" "private_sn2" {
   vpc_id = aws_vpc.this.id
   for_each = toset(keys({ for k, v in var.subnets : k => v if v.ipv4_type[0] == "private" && v.natgw_enable[0] == "no" }))
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[1], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic private route table with natgw
@@ -150,7 +121,7 @@ resource "aws_route_table" "natgw_attach_sn1" {
     gateway_id = aws_nat_gateway.sn1.id
   }
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[0], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # dynamic private route table with natgw
@@ -163,7 +134,7 @@ resource "aws_route_table" "natgw_attach_sn2" {
     gateway_id = aws_nat_gateway.sn2.id
   }
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
+  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.azs[1], var.subnets[each.value].ipv4_type[0], each.value)}))
 }
 
 # public route table association for sn1
