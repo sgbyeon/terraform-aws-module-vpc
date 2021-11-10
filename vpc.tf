@@ -26,7 +26,7 @@ resource "aws_eip" "nat" {
 # nat gateway for sn1
 resource "aws_nat_gateway" "sn1" {
   //for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
-  allocation_id = aws_eip.nat[0]
+  allocation_id = aws_eip.nat[0].id
   subnet_id = aws_subnet.sn1["natgw"].id
   
   depends_on = [
@@ -39,7 +39,7 @@ resource "aws_nat_gateway" "sn1" {
 # nat gateway for sn2
 resource "aws_nat_gateway" "sn2" {
   //for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
-  allocation_id = aws_eip.nat[1]
+  allocation_id = aws_eip.nat[1].id
   subnet_id = aws_subnet.sn2["natgw"].id
   
   depends_on = [
