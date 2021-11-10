@@ -25,9 +25,9 @@ resource "aws_eip" "nat" {
 
 # nat gateway for sn1
 resource "aws_nat_gateway" "sn1" {
-  for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
+  //for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
   allocation_id = aws_eip.nat[0]
-  subnet_id = aws_subnet.sn1[each.value].id
+  subnet_id = aws_subnet.sn1["natgw"].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -38,9 +38,9 @@ resource "aws_nat_gateway" "sn1" {
 
 # nat gateway for sn2
 resource "aws_nat_gateway" "sn2" {
-  for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
+  //for_each = toset(keys({ for k, v in var.subnets : k => v if v == "natgw" }))
   allocation_id = aws_eip.nat[1]
-  subnet_id = aws_subnet.sn2[each.value].id
+  subnet_id = aws_subnet.sn2["natgw"].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -149,7 +149,7 @@ resource "aws_route_table" "natgw_attach_sn1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.sn1["natgw"].id
+    gateway_id = aws_nat_gateway.sn1.id
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[0], each.value)}))
@@ -162,7 +162,7 @@ resource "aws_route_table" "natgw_attach_sn2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.sn2["natgw"].id
+    gateway_id = aws_nat_gateway.sn2.id
   }
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-rt", var.prefix, var.vpc_name, var.subnets[each.value].ipv4_type[0], var.azs[1], each.value)}))
