@@ -118,12 +118,6 @@ variable "vpc_cidr" {
   default = ""
 }
 
-variable "vpc_secondary_cidr" {
-  description = "VPC secondary cidr"
-  type = string
-  default = ""
-}
-
 variable "azs" {
   description = "Availability Zone List"
   type = list
@@ -150,11 +144,6 @@ output "vpc_id" {
 output "vpc_cidr_block" {
   description = "CIDR block for VPC"
   value = module.vpc.vpc_cidr_block
-}
-
-output "vpc_secondary_cidr_block" {
-  description = "CIDR block for VPC"
-  value = module.vpc.vpc_secondary_cidr_block
 }
 
 output "sn1_subnet_ids" {
