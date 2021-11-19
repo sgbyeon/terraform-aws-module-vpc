@@ -29,9 +29,11 @@ resource "aws_subnet" "this" {
 
   dynamic "subnet" {
     for_each = toset(keys({ for k, v in var.subnets : k => v }))
-    cidr_block = var.subnets[each.value].cidr[count.index]
-    availability_zone = var.azs[count.index]
-    tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.azs[count.index], var.subnets[each.value].ipv4_type[0], each.value)}))
+    content {
+      cidr_block = var.subnets[each.value].cidr[count.index]
+      availability_zone = var.azs[count.index]
+      tags = merge(var.tags, tomap({Name = format("%s-%s-%s-%s-%s-sn", var.prefix, var.vpc_name, var.azs[count.index], var.subnets[each.value].ipv4_type[0], each.value)}))
+    }
   }
 }
 
