@@ -24,6 +24,12 @@ variable "azs" {
   type = list
 }
 
+variable "enable_nat_gateway" {
+  description = "nat gateway whether or not use"
+  type = string
+  default = "false"
+}
+
 variable "tags" {
   description = "tag map"
   type = map(string)
