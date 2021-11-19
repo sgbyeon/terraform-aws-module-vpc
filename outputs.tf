@@ -8,15 +8,15 @@ output "vpc_cidr_block" {
   value = aws_vpc.this.cidr_block
 }
 
-output "sn1_subnet_ids" {
-  description = "Subnet ID List"
-  value = [aws_subnet.sn1]
-}
-
-output "sn2_subnet_ids" {
-  description = "Subnet ID List"
-  value = [aws_subnet.sn2]
-}
+#output "sn1_subnet_ids" {
+#  description = "Subnet ID List"
+#  value = [aws_subnet.sn1]
+#}
+#
+#output "sn2_subnet_ids" {
+#  description = "Subnet ID List"
+#  value = [aws_subnet.sn2]
+#}
 
 output "igw_id" {
   description = "Internet Gateway ID"
