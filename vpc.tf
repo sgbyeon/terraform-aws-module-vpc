@@ -48,7 +48,7 @@ resource "aws_subnet" "sn2" {
 # nat gateway for sn1
 resource "aws_nat_gateway" "sn1" {
   allocation_id = aws_eip.nat[0].id
-  subnet_id = aws_subnet.sn1["natgw"].id
+  subnet_id = aws_subnet.sn1["bastion"].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -60,7 +60,7 @@ resource "aws_nat_gateway" "sn1" {
 # nat gateway for sn2
 resource "aws_nat_gateway" "sn2" {
   allocation_id = aws_eip.nat[1].id
-  subnet_id = aws_subnet.sn2["natgw"].id
+  subnet_id = aws_subnet.sn2["bastion"].id
   
   depends_on = [
     aws_internet_gateway.this
