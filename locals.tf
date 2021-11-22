@@ -8,7 +8,7 @@ locals {
     ]
   ])
   cidrs = {
-    for item in subnets :
+    for item in local.subnets :
     uuid() => item
   }
 }
