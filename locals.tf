@@ -1,5 +1,5 @@
 locals {
-  subnets = flatten([
+  subnet = flatten([
     for key, value in var.subnets : [
       for item in value.cidr : {
         cidr = item
@@ -8,7 +8,7 @@ locals {
     ]
   ])
   cidrs = {
-    for item in local.subnets :
+    for item in local.subnet :
     uuid() => item
   }
 }
