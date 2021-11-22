@@ -42,7 +42,8 @@ resource "aws_subnet" "this" {
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
-  for_each = { for i in local.subnets : i.cidr => i if i.ipv4_type == "public" }
+  //for_each = { for i in local.subnets : i.cidr => i }
+  for_each = flatten([ for k, v in var.subnets : [ for i in v.cidr : { name = k, item = i } ] if v.ipv4_type == "public" ])
   allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
   subnet_id = aws_subnet.this[each.key].id
   
