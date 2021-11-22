@@ -23,34 +23,54 @@ output "igw_id" {
   value = aws_internet_gateway.this.id
 }
 
-output "sn1_natgw_id" {
+output "natgw_id" {
   description = "Nat Gateway ID"
-  value = [aws_nat_gateway.sn1]
+  value = [aws_nat_gateway.this]
 }
 
-output "sn2_natgw_id" {
-  description = "Nat Gateway ID"
-  value = [aws_nat_gateway.sn2]
-}
+#output "sn1_natgw_id" {
+#  description = "Nat Gateway ID"
+#  value = [aws_nat_gateway.sn1]
+#}
 
-output "sn1_public_route_table_ids" {
+#output "sn2_natgw_id" {
+#  description = "Nat Gateway ID"
+#  value = [aws_nat_gateway.sn2]
+#}
+
+output "public_route_table_ids" {
   description = "Public Route Table ID List"
-  value = [aws_route_table.public_sn1]
+  value = [aws_route_table.public]
 }
 
-output "sn2_public_route_table_ids" {
+#output "sn1_public_route_table_ids" {
+#  description = "Public Route Table ID List"
+#  value = [aws_route_table.public_sn1]
+#}
+
+#output "sn2_public_route_table_ids" {
+#  description = "Public Route Table ID List"
+#  value = [aws_route_table.public_sn2]
+#}
+
+output "private_route_table_ids" {
   description = "Public Route Table ID List"
-  value = [aws_route_table.public_sn2]
+  value = [aws_route_table.private]
 }
 
-output "sn1_private_route_table_ids" {
-  description = "Public Route Table ID List"
-  value = [aws_route_table.private_sn1]
-}
+#output "sn1_private_route_table_ids" {
+#  description = "Public Route Table ID List"
+#  value = [aws_route_table.private_sn1]
+#}
 
-output "sn2_private_route_table_ids" {
+#output "sn2_private_route_table_ids" {
+#  description = "Public Route Table ID List"
+#  value = [aws_route_table.private_sn2]
+#}
+
+output "private_route_table_with_natgw_ids" {
   description = "Public Route Table ID List"
-  value = [aws_route_table.private_sn2]
+  value = [aws_route_table.private_with_natgw.id]
 }
 
 output "default_security_group" {
