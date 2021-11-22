@@ -180,7 +180,7 @@ resource "aws_route_table" "private" {
 #}
 
 # dynamic route table for private with nat gateway
-resource "aws_route_table" "private" {
+resource "aws_route_table" "private_with_natgw" {
   vpc_id = aws_vpc.this.id
   for_each = toset(keys({ for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ] if v.ipv4_type == "private" && v.natgw == "yes" }))
 
@@ -249,11 +249,11 @@ resource "aws_route_table_association" "public" {
 #}
 
 # private route table association
-resource "aws_route_table_association" "public" {
+resource "aws_route_table_association" "private" {
   for_each = toset(keys({ for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ] if v.ipv4_type == "private" && v.natgw == "no" }))
 
   subnet_id = aws_subnet.this[each.value.item].id
-  route_table_id = aws_route_table.public[each.value.item].id
+  route_table_id = aws_route_table.private[each.value.item].id
 }
 
 # private route table association for sn1
@@ -273,11 +273,11 @@ resource "aws_route_table_association" "public" {
 #}
 
 # private route table association with nat gateway
-resource "aws_route_table_association" "public" {
+resource "aws_route_table_association" "private_with_natgw" {
   for_each = toset(keys({ for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ] if v.ipv4_type == "private" && v.natgw == "yes" }))
 
   subnet_id = aws_subnet.this[each.value.item].id
-  route_table_id = aws_route_table.public[each.value.item].id
+  route_table_id = aws_route_table.private_with_natgw[each.value.item].id
 }
 
 # private route table association for sn1 with natgw
