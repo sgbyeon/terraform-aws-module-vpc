@@ -27,8 +27,7 @@ resource "aws_eip" "nat" {
 resource "aws_subnet" "this" {
   vpc_id = aws_vpc.this.id
   
-  //for_each = { for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ]}
-  for_each = local.cidrs
+  for_each = [ for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ] ]
   cidr_block = each.value.cidr
   availability_zone = var.azs[index(var.subnets[each.value.name].cidr, each.value.cidr)]
 
