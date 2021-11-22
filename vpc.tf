@@ -36,7 +36,7 @@ resource "aws_subnet" "this" {
                                                 var.vpc_name,
                                                 var.azs[count.index],
                                                 var.subnets[local.subnets.name].ipv4_type,
-                                                each.value.name
+                                                local.subnets.name
                                               )}))
 }
 
