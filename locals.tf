@@ -16,6 +16,6 @@ locals {
         name = key
         cidr = item
       }
-    ] if v.ipv4_type == "public"
+    ] if value.ipv4_type == "public"
   ])
 }
