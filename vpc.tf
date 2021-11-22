@@ -26,16 +26,16 @@ resource "aws_eip" "nat" {
 # dynamic subnet
 resource "aws_subnet" "this" {
   vpc_id = aws_vpc.this.id
-  
-  for_each = { for k, v in var.subnets : k => { for i in v.cidr : i => { name = k, item = i } } }
-  cidr_block = each.value.item
-  availability_zone = var.azs[index(var.subnets[each.value.name].cidr, each.value.item)]
+  count = length(var.azs)
+  //for_each = { for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ] }
+  cidr_block = local.subnets.cidr[count.index]
+  availability_zone = var.azs[count.index)]
 
   tags = merge(var.tags, tomap({ Name = format("%s-%s-%s-%s-%s-sn", 
                                                 var.prefix,
                                                 var.vpc_name,
-                                                var.azs[index(var.subnets[each.value.name].cidr, each.value.item)],
-                                                var.subnets[each.value.name].ipv4_type,
+                                                var.azs[count.index],
+                                                var.subnets[local.subnets.name].ipv4_type,
                                                 each.value.name
                                               )}))
 }
