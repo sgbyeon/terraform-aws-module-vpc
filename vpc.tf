@@ -29,7 +29,7 @@ resource "aws_subnet" "this" {
   
   for_each = toset(keys({ for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ]}))
   cidr_block = each.value.cidr[item]
-  availability_zone = var.azs[index(var.subnets[each.value].cidr, each.value.cidr[item])
+  availability_zone = var.azs[index(var.subnets[each.value].cidr, each.value.cidr[item])]
 
   tags = merge(var.tags, tomap({ Name = format("%s-%s-%s-%s-%s-sn", 
                                                 var.prefix,
