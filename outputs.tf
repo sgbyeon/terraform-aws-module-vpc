@@ -70,7 +70,7 @@ output "private_route_table_ids" {
 
 output "private_route_table_with_natgw_ids" {
   description = "Public Route Table ID List"
-  value = [aws_route_table.private_with_natgw.id]
+  value = [aws_route_table.private_with_natgw]
 }
 
 output "default_security_group" {
