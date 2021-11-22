@@ -28,13 +28,13 @@ resource "aws_subnet" "this" {
   vpc_id = aws_vpc.this.id
   
   for_each = { for k, v in var.subnets : k => [ for i in v.cidr : { name = k, item = i } ]}
-  cidr_block = each.value.item
-  availability_zone = var.azs[index(var.subnets[each.value].cidr, each.value.item)]
+  cidr_block = each.value[item]
+  availability_zone = var.azs[index(var.subnets[each.value].cidr, each.value[item])]
 
   tags = merge(var.tags, tomap({ Name = format("%s-%s-%s-%s-%s-sn", 
                                                 var.prefix,
                                                 var.vpc_name,
-                                                var.azs[index(var.subnets[each.value].cidr, each.value.item)],
+                                                var.azs[index(var.subnets[each.value].cidr, each.value[item])],
                                                 var.subnets[each.value].ipv4_type,
                                                 each.value.name
                                               )}))
