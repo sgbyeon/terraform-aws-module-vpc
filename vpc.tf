@@ -46,10 +46,10 @@ resource "aws_subnet" "this" {
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
-  for_each = { for i in local.public_subnets : i.cidr => i }
+  for_each = { for i in local.public_subnets_with_natgwsn : i.cidr => i }
   allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
-  //subnet_id = aws_subnet.this[each.key].id
-  subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, index(var.subnets[each.value.name].cidr, each.key))].id
+  subnet_id = aws_subnet.this[each.key].id
+  //subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, index(var.subnets[each.value.name].cidr, each.key))].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -119,7 +119,7 @@ resource "aws_route_table" "private_with_natgw" {
   route {
     cidr_block = "0.0.0.0/0"
     //gateway_id = "${aws_nat_gateway.this[index(var.subnets[each.value.name].cidr, each.key)].id}"
-    gateway_id = "${aws_nat_gateway.this[element(var.subnets[each.value.name].cidr, index(var.subnets[each.value.name].cidr, each.key))].id}"
+    gateway_id = "${aws_nat_gateway.this[element(var.subnets["natgw"].cidr, index(var.subnets[each.value.name].cidr, each.key))].id}"
     
   }
 
