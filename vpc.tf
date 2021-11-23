@@ -46,14 +46,10 @@ resource "aws_subnet" "this" {
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
-  count = "${ var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
-  //for_each = { for i in local.public_subnets : i.cidr => i }
-  //allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
-  allocation_id = aws_eip.nat[count.index].id
-
   for_each = { for i in local.public_subnets : i.cidr => i }
+  allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
   //subnet_id = aws_subnet.this[each.key].id
-  subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, count.index)].id
+  subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, index(var.subnets[each.value.name].cidr, each.key))].id
   
   depends_on = [
     aws_internet_gateway.this
