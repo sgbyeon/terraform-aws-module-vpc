@@ -117,8 +117,9 @@ resource "aws_route_table" "private_with_natgw" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    //gateway_id = aws_nat_gateway.this[index(var.subnets[each.value.name].cidr, each.key)].ids
-    gateway_id = aws_nat_gateway.this[*].ids
+    //gateway_id = aws_nat_gateway.this[index(var.subnets[each.value.name].cidr, each.key)].id
+    gateway_id = aws_nat_gateway.this.id
+    
   }
 
   tags = merge(var.tags,
