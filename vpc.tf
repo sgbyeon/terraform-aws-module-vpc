@@ -46,12 +46,14 @@ resource "aws_subnet" "this" {
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
+  count = "${ var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
   //for_each = { for i in local.public_subnets : i.cidr => i }
-  count = "${ var.enable_nat_gateway == "ture" ? length(var.azs) : 0 }"
   //allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
-  allocation_id = aws_eip.nat[count.index]
+  allocation_id = aws_eip.nat[count.index].id
+
+  for_each = { for i in local.public_subnets : i.cidr => i }
   //subnet_id = aws_subnet.this[each.key].id
-  subnet_id = aws_subnet.this[element(var.subnets.*.cidr, count.index)].id
+  subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, count.index)].id
   
   depends_on = [
     aws_internet_gateway.this
@@ -60,13 +62,11 @@ resource "aws_nat_gateway" "this" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        //"%s-%s-%s-%s-natgw",
-        "%s-%s-%s-natgw",
+        "%s-%s-%s-%s-natgw",
         var.prefix,
         var.vpc_name,
-        //var.azs[index(var.subnets[each.value.name].cidr, each.key)],
-        var.azs[count.index],
-        //each.value.name
+        var.azs[index(var.subnets[each.value.name].cidr, each.key)],
+        each.value.name
       )
     })
   )
