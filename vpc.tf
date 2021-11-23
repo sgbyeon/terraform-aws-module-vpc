@@ -62,8 +62,7 @@ resource "aws_nat_gateway" "this" {
         "%s-%s-%s-%s-natgw",
         var.prefix,
         var.vpc_name,
-        var.azs[count.index],
-        each.value.name
+        var.azs[count.index]
       )
     })
   )
