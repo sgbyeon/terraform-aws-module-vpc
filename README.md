@@ -155,14 +155,9 @@ output "vpc_cidr_block" {
   value = module.vpc.vpc_cidr_block
 }
 
-output "sn1_subnet_ids" {
+output "subnet_ids" {
   description = "Subnet ID List"
-  value = module.vpc.sn1_subnet_ids
-}
-
-output "sn2_subnet_ids" {
-  description = "Subnet ID List"
-  value = module.vpc.sn2_subnet_ids
+  value = module.vpc.subnet_ids
 }
 
 output "igw_id" {
@@ -170,34 +165,24 @@ output "igw_id" {
   value = module.vpc.igw_id
 }
 
-output "sn1_natgw_id" {
+output "natgw_id" {
   description = "Nat Gateway ID"
-  value = module.vpc.sn1_natgw_id
+  value = module.vpc.natgw_id
 }
 
-output "sn2_natgw_id" {
-  description = "Nat Gateway ID"
-  value = module.vpc.sn2_natgw_id
-}
-
-output "sn1_public_route_table_ids" {
+output "public_route_table_ids" {
   description = "Public Route Table ID List"
-  value = module.vpc.sn1_public_route_table_ids
+  value = module.vpc.public_route_table_ids
 }
 
-output "sn2_public_route_table_ids" {
+output "private_route_table_ids" {
   description = "Public Route Table ID List"
-  value = module.vpc.sn2_public_route_table_ids
+  value = module.vpc.private_route_table_ids
 }
 
-output "sn1_private_route_table_ids" {
-  description = "Private Route Table ID List"
-  value = module.vpc.sn1_private_route_table_ids
-}
-
-output "sn2_private_route_table_ids" {
-  description = "Private Route Table ID List"
-  value = module.vpc.sn2_private_route_table_ids
+output "private_route_table_with_natgw_ids" {
+  description = "Public Route Table ID List"
+  value = module.vpc.private_route_table_with_natgw_ids
 }
 
 output "default_security_group" {
