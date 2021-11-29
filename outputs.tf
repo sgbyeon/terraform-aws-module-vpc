@@ -1,3 +1,8 @@
+output "account_id" {
+  description = "AWS Account Id"
+  value = var.account_id
+}
+
 output "vpc_id" {
   description = "VPC ID"
   value = aws_vpc.this.id
