@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "this" {
 # eip for nat gateway
 resource "aws_eip" "nat" {
   vpc = true
-  count = "${ var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
+  count = "${ var.enable_internet_gateway == "true" && var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-%s-eip", var.prefix, var.vpc_name, var.azs[count.index])}))
 }
