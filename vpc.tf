@@ -94,7 +94,7 @@ resource "aws_route_table" "public" {
 # dynamic route table for private
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
-  for_each = { for i in local.private_subnets : i.cidr => i }
+  for_each = { for i in local.private_subnets : i.cidr => i if i.rt2natgw == "no" }
 
   tags = merge(var.tags,
     tomap({
@@ -113,11 +113,10 @@ resource "aws_route_table" "private" {
 # dynamic route table for private with nat gateway
 resource "aws_route_table" "private_with_natgw" {
   vpc_id = aws_vpc.this.id
-  for_each = { for i in local.private_subnets_with_natgw : i.cidr => i }
+  for_each = { for i in local.private_subnets_with_natgw : i.cidr => i if i.rt2natgw == "yes" }
 
   route {
     cidr_block = "0.0.0.0/0"
-    //gateway_id = "${aws_nat_gateway.this[index(var.subnets[each.value.name].cidr, each.key)].id}"
     gateway_id = "${aws_nat_gateway.this[element(var.subnets["natgw"].cidr, index(var.subnets[each.value.name].cidr, each.key))].id}"
     
   }

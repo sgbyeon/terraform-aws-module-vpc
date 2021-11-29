@@ -26,18 +26,8 @@ locals {
       for item in value.cidr : {
         name = key
         cidr = item
+        rt2natgw = value.rt2natgw
       }
-    ] if value.ipv4_type == "private" && value.rt2natgw == "no"
-  ])
-}
-
-locals {
-  private_subnets_with_natgw = flatten([
-    for key, value in var.subnets : [
-      for item in value.cidr : {
-        name = key
-        cidr = item
-      }
-    ] if value.ipv4_type == "private" && value.rt2natgw == "yes"
+    ] if value.ipv4_type == "private"
   ])
 }
