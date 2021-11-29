@@ -145,7 +145,7 @@ resource "aws_route_table_association" "public" {
 
 # private route table association
 resource "aws_route_table_association" "private" {
-  for_each = { for i in local.private_subnets : i.cidr => i }
+  for_each = { for i in local.private_subnets : i.cidr => i if i.rt2natgw == "no" }
 
   subnet_id = aws_subnet.this[each.key].id
   route_table_id = aws_route_table.private[each.key].id
@@ -153,7 +153,7 @@ resource "aws_route_table_association" "private" {
 
 # private route table association with nat gateway
 resource "aws_route_table_association" "private_with_natgw" {
-  for_each = { for i in local.private_subnets_with_natgw : i.cidr => i }
+  for_each = { for i in local.private_subnets : i.cidr => i if i.rt2natgw == "yes" }
 
   subnet_id = aws_subnet.this[each.key].id
   route_table_id = aws_route_table.private_with_natgw[each.key].id
