@@ -18,10 +18,11 @@ vpc_cidr = "10.10.0.0/16" # 적절하게 변경
 azs = ["ap-northeast-2a", "ap-northeast-2c"] # AZ 개수와 서브넷 개수는 같아야함
 enable_nat_gateway = "true"
 
-# nat gateway 사용 시 필수 조건
-# enable_nat_gateway = "true"
-# subnets 맵에 natgw 이름의 오브젝트 필요(아래 참고)
-# nat gateway가 필요한 서브넷에 "rt2natgw" = "yes" 필요
+# -[ nat gateway 사용 시 필수 조건 ]-
+# 1. enable_internet_gateway = "true"
+# 2. enable_nat_gateway = "true"
+# 3. subnets 맵에 natgw 이름의 오브젝트 필요(아래 참고)
+# 4. nat gateway가 필요한 서브넷에 "rt2natgw" = "yes" 필요
 subnets = {
   "natgw" = { # enable_nat_gateway = "true" 일 경우 반드시 필요
     "cidr" = ["10.10.0.0/24", "10.10.10.0/24"],
@@ -124,6 +125,12 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability Zone List"
   type = list
+}
+
+variable "enable_internet_gateway" {
+  description = "internet gateway whether or not use"
+  type = string
+  default = "false"
 }
 
 variable "enable_nat_gateway" {
