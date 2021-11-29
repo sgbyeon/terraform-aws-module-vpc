@@ -40,7 +40,9 @@ resource "aws_subnet" "this" {
         var.subnets[each.value.name].ipv4_type,
         each.value.name
       )
-    })
+    }),
+    var.subnets[each.value.name].ipv4_type == "private" ? "Tier = private" : {},
+    var.subnets[each.value.name].ipv4_type == "public" ? "Tier = public" : {}
   )
 }
 
@@ -87,7 +89,8 @@ resource "aws_route_table" "public" {
         var.subnets[each.value.name].ipv4_type,
         each.value.name
       )
-    })
+    }),
+    "Tier = public"
   )
 }
 
@@ -106,7 +109,8 @@ resource "aws_route_table" "private" {
         var.subnets[each.value.name].ipv4_type,
         each.value.name
       )
-    })
+    }),
+    "Tier = private"
   )
 }
 
@@ -131,7 +135,8 @@ resource "aws_route_table" "private_with_natgw" {
         var.subnets[each.value.name].ipv4_type,
         each.value.name
       )
-    })
+    }),
+    "Tier = private"
   )
 }
 
