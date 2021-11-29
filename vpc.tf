@@ -46,10 +46,9 @@ resource "aws_subnet" "this" {
 
 # nat gateway
 resource "aws_nat_gateway" "this" {
-  for_each = { for i in local.public_subnets_with_natgwsn : i.cidr => i }
-  allocation_id = aws_eip.nat[index(var.subnets[each.value.name].cidr, each.key)].id
+  for_each = { for i in local.public_subnets_with_natgw : i.cidr => i }
+  allocation_id = aws_eip.nat[index(var.subnets["natgw"].cidr, each.key)].id
   subnet_id = aws_subnet.this[each.key].id
-  //subnet_id = aws_subnet.this[element(var.subnets[each.value.name].cidr, index(var.subnets[each.value.name].cidr, each.key))].id
   
   depends_on = [
     aws_internet_gateway.this
