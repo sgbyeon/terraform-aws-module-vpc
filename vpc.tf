@@ -10,7 +10,7 @@ resource "aws_vpc" "this" {
 
 # internet gateway
 resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = var.aws_internet_gateway == "true" ? aws_vpc.this.id : {}
 
   tags = merge(var.tags, tomap({Name = format("%s-%s-igw", var.prefix, var.vpc_name)}))
 }
