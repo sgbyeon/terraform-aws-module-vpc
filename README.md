@@ -61,6 +61,7 @@ module "vpc" {
   vpc_name = var.vpc_name
   vpc_cidr = var.vpc_cidr
   azs = var.azs
+  enable_nat_gateway = var.enable_nat_gateway
   subnets = var.subnets
   tags = var.tags
 }
@@ -125,13 +126,19 @@ variable "azs" {
   type = list
 }
 
+variable "enable_nat_gateway" {
+  description = "nat gateway whether or not use"
+  type = string
+  default = "false"
+}
+
 variable "tags" {
   description = "tag map"
   type = map(string)
 }
 
 variable "subnets" {
-  type = map(map(any))
+  type = map(any)
 }
 ```
 ---

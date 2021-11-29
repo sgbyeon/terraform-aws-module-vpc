@@ -13,6 +13,11 @@ output "igw_id" {
   value = aws_internet_gateway.this.id
 }
 
+output "subnet_ids" {
+  description = "Subnet ID List"
+  value = [aws_subnet.this]
+}
+
 output "natgw_id" {
   description = "Nat Gateway ID"
   value = [aws_nat_gateway.this]
