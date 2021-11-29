@@ -152,6 +152,11 @@ variable "subnets" {
 
 ### `outputs.tf`
 ```
+output "account_id" {
+  description = "AWS Account ID"
+  value = module.vpc.account_id
+}
+
 output "vpc_id" {
   description = "VPC ID"
   value = module.vpc.vpc_id
