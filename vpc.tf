@@ -113,7 +113,7 @@ resource "aws_route_table" "private" {
 # dynamic route table for private with nat gateway
 resource "aws_route_table" "private_with_natgw" {
   vpc_id = aws_vpc.this.id
-  for_each = { for i in local.private_subnets_with_natgw : i.cidr => i if i.rt2natgw == "yes" }
+  for_each = { for i in local.private_subnets : i.cidr => i if i.rt2natgw == "yes" }
 
   route {
     cidr_block = "0.0.0.0/0"
