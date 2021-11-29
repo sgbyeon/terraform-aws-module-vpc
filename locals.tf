@@ -27,7 +27,7 @@ locals {
         name = key
         cidr = item
       }
-    ] if value.ipv4_type == "private" && value.natgw == "no"
+    ] if value.ipv4_type == "private" && value.rt2natgw == "no"
   ])
 }
 
