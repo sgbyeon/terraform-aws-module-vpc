@@ -10,7 +10,7 @@
 ### `terraform.tfvars`
 * 모든 변수는 적절하게 변경하여 사용
 ```
-account_id = ["123456789012"] # 아이디 변경 필수
+account_id = ["123456789012"] # 아이디 변경 필수, output 확인용, 실수 방지용도, 리소스에 사용하진 않음
 region = "ap-northeast-2"
 prefix = "bsg"
 vpc_name = "terraform-test-vpc" # 최종 VPC 이름: ${prefix}-${vpc_name}
