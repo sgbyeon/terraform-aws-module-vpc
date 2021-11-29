@@ -12,35 +12,37 @@
 * 모든 변수는 적절하게 변경하여 사용
 ```
 account_id = ["123456789012"] # 아이디 변경 필수
-region = "ap-northeast-2" # 적절하게 변경
-prefix = "bsg" # 적절하게 변경
-vpc_name = "test-vpc" # 최종 VPC 이름: 'prefix'-'vpc_name', 적절하게 변경
+region = "ap-northeast-2"
+prefix = "bsg"
+vpc_name = "terraform-test-vpc" # 최종 VPC 이름: ${prefix}-${vpc_name}
 vpc_cidr = "10.10.0.0/16" # 적절하게 변경
-azs = ["ap-northeast-2a", "ap-northeast-2c"] # AZ 2개만 지원, 변경은 가능
+azs = ["ap-northeast-2a", "ap-northeast-2c"] # AZ 개수와 서브넷 개수는 같아야함
+enable_nat_gateway = "true"
 
-# 서브넷 맵에 natgw 필수, 이름 변경 불가
-# natgw는 AZ 당 하나 씩 생성
-# 서브넷은 추가 가능
+# nat gateway 사용 시 필수 조건
+# enable_nat_gateway = "true"
+# subnets 맵에 natgw 이름의 오브젝트 필요(아래 참고)
+# nat gateway가 필요한 서브넷에 "rt2natgw" = "yes" 필요
 subnets = {
-  "natgw" = { # 필수, 제거하거나 이름을 바꾸면 오류 발생, cidr만 변경 가능
-    "cidr" = ["10.10.0.0/24", "10.10.10.0/24"]
-    "ipv4_type" = ["public"]
-    "natgw_enable" = ["no"]
+  "natgw" = { # enable_nat_gateway = "true" 일 경우 반드시 필요
+    "cidr" = ["10.10.0.0/24", "10.10.10.0/24"],
+    "ipv4_type" = "public", # enable_nat_gateway = "true" 일 경우 반드시 public 이어야 함
+    "rt2natgw" = "no",
   },
   "web" = {
-    "cidr" = ["10.10.20.0/24", "10.10.30.0/24"]
-    "ipv4_type" = ["private"]
-    "natgw_enable" = ["no"]
+    "cidr" = ["10.10.20.0/24", "10.10.30.0/24"],
+    "ipv4_type" = "private",
+    "rt2natgw" = "no",
   },
   "was" = {
-    "cidr" = ["10.10.40.0/24", "10.10.50.0/24"]
-    "ipv4_type" = ["private"]
-    "natgw_enable" = ["yes"] # natgw 라우팅 테이블 추가
+    "cidr" = ["10.10.40.0/24", "10.10.50.0/24"],
+    "ipv4_type" = "private",
+    "rt2natgw" = "yes", # nat gateway를 routing table에 추가 할려면 변수 선언 필요
   },
-  "db" = {
-    "cidr" = ["10.10.60.0/24", "10.10.70.0/24"]
-    "ipv4_type" = ["private"]
-    "natgw_enable" = ["no"]
+  "rds" = {
+    "cidr" = ["10.10.60.0/24", "10.10.70.0/24"],
+    "ipv4_type" = "private",
+    "rt2natgw" = "no",
   }
 }
 
