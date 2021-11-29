@@ -24,6 +24,12 @@ variable "azs" {
   type = list
 }
 
+variable "enable_internet_gateway" {
+  description = "internet gateway whether or not use"
+  type = string
+  default = "false"
+}
+
 variable "enable_nat_gateway" {
   description = "nat gateway whether or not use"
   type = string
