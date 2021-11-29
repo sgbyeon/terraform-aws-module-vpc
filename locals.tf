@@ -16,7 +16,7 @@ locals {
         name = key
         cidr = item
       }
-    ] if value.ipv4_type == "public" && key == "natgw"
+    ] if value.ipv4_type == "public"
   ])
 }
 
