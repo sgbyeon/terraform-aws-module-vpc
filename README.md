@@ -11,12 +11,14 @@
 * 모든 변수는 적절하게 변경하여 사용
 ```
 account_id = ["123456789012"] # 아이디 변경 필수, output 확인용, 실수 방지용도, 리소스에 사용하진 않음
-region = "ap-northeast-2"
+region = "ap-northeast-2" # 리전 변경 필수, output 확인용, 실수 방지용도, 리소스에 사용하진 않음
 prefix = "bsg"
 vpc_name = "terraform-test-vpc" # 최종 VPC 이름: ${prefix}-${vpc_name}
 vpc_cidr = "10.10.0.0/16" # 적절하게 변경
 azs = ["ap-northeast-2a", "ap-northeast-2c"] # AZ 개수와 서브넷 개수는 같아야함
-enable_nat_gateway = "true"
+
+enable_internet_gateway = "true"
+enable_nat_gateway = "false" 
 
 # -[ nat gateway 사용 시 필수 조건 ]-
 # 1. enable_internet_gateway = "true"
