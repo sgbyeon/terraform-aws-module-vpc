@@ -59,11 +59,11 @@ resource "aws_nat_gateway" "this" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s.%s.%s.%s",
+        "%s.%s.%s.subnet-%s",
         var.prefix,
         var.vpc_name,
-        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1),
-        each.value.name
+        each.value.name,
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1)
       )
     })
   )
