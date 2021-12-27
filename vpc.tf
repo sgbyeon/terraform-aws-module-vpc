@@ -58,7 +58,7 @@ resource "aws_nat_gateway" "this" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s.%s.%s.subnet-%s",
+        "%s.%s.%s-%s",
         var.prefix,
         var.vpc_name,
         each.value.name,
