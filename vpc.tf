@@ -82,12 +82,12 @@ resource "aws_route_table" "public" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s-%s-%s-%s-%s-rt",
+        "%s.%s.%s.%s.%s",
         var.prefix,
         var.vpc_name,
-        var.azs[index(var.subnets[each.value.name].cidr, each.key)],
-        var.subnets[each.value.name].ipv4_type,
-        each.value.name
+        each.value.name,
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1),
+        #var.subnets[each.value.name].ipv4_type,
       )
     }),
     { "Tier" = "public" }
