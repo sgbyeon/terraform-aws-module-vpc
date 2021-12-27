@@ -82,12 +82,11 @@ resource "aws_route_table" "public" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s.%s.%s.%s",
+        "%s.%s.%s.route-table-%s",
         var.prefix,
         var.vpc_name,
         each.value.name,
-        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1),
-        #var.subnets[each.value.name].ipv4_type,
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1)
       )
     }),
     { "Tier" = "public" }
@@ -102,12 +101,11 @@ resource "aws_route_table" "private" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s-%s-%s-%s-%s-rt",
+        "%s.%s.%s.route-table-%s",
         var.prefix,
         var.vpc_name,
-        var.azs[index(var.subnets[each.value.name].cidr, each.key)],
-        var.subnets[each.value.name].ipv4_type,
-        each.value.name
+        each.value.name,
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1)
       )
     }),
     { "Tier" = "private" }
@@ -128,12 +126,11 @@ resource "aws_route_table" "private_with_natgw" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s-%s-%s-%s-%s-rt",
+        "%s.%s.%s.route-table-%s",
         var.prefix,
         var.vpc_name,
-        var.azs[index(var.subnets[each.value.name].cidr, each.key)],
-        var.subnets[each.value.name].ipv4_type,
-        each.value.name
+        each.value.name,
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1)
       )
     }),
     { "Tier" = "private" }
