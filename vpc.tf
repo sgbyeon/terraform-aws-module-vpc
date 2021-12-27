@@ -5,7 +5,7 @@ resource "aws_vpc" "this" {
   enable_dns_support = true
   instance_tenancy = "default"
 
-  tags = merge(var.tags, tomap({"Name" = format("%s-%s", var.prefix, var.vpc_name)}))
+  tags = merge(var.tags, tomap({"Name" = format("%s.%s", var.prefix, var.vpc_name)}))
 }
 
 # internet gateway
