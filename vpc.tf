@@ -82,7 +82,7 @@ resource "aws_route_table" "public" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s.%s.%s.%s.%s",
+        "%s.%s.%s.%s",
         var.prefix,
         var.vpc_name,
         each.value.name,
