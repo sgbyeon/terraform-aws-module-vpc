@@ -12,7 +12,7 @@ resource "aws_vpc" "this" {
 resource "aws_internet_gateway" "this" {
   vpc_id = var.enable_internet_gateway == "true" ? aws_vpc.this.id : ""
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-igw", var.prefix, var.vpc_name)}))
+  tags = merge(var.tags, tomap({Name = format("%s.%s.igw", var.prefix, var.vpc_name)}))
 }
 
 # eip for nat gateway
@@ -20,7 +20,7 @@ resource "aws_eip" "nat" {
   vpc = true
   count = "${ var.enable_internet_gateway == "true" && var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
 
-  tags = merge(var.tags, tomap({Name = format("%s-%s-%s-eip", var.prefix, var.vpc_name, var.azs[count.index])}))
+  tags = merge(var.tags, tomap({Name = format("%s.%s.%s.eip", var.prefix, var.vpc_name, var.azs[count.index])}))
 }
 
 # dynamic subnet
@@ -33,7 +33,7 @@ resource "aws_subnet" "this" {
   tags = merge(var.tags, 
     tomap({
       Name = format(
-        "%s-%s-%s-%s-%s-sn", 
+        "%s.%s.%s.%s.%s.sn", 
         var.prefix,
         var.vpc_name,
         var.azs[index(var.subnets[each.value.name].cidr, each.key)],
@@ -59,10 +59,10 @@ resource "aws_nat_gateway" "this" {
   tags = merge(var.tags,
     tomap({
       Name = format(
-        "%s-%s-%s-%s-natgw",
+        "%s.%s.%s.%s",
         var.prefix,
         var.vpc_name,
-        var.azs[index(var.subnets[each.value.name].cidr, each.key)],
+        substr(var.azs[index(var.subnets[each.value.name].cidr, each.key)], -2, -1),
         each.value.name
       )
     })
