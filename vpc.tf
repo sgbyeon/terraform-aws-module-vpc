@@ -20,7 +20,15 @@ resource "aws_eip" "nat" {
   vpc = true
   count = "${ var.enable_internet_gateway == "true" && var.enable_nat_gateway == "true" ? length(var.azs) : 0 }"
 
-  tags = merge(var.tags, tomap({Name = format("%s.%s.%s.eip", var.prefix, var.vpc_name, var.azs[count.index])}))
+  tags = merge(var.tags,
+    tomap({
+      Name = format(
+        "%s.%s.eip-%s",
+        var.prefix,
+        var.vpc_name,
+        substr(var.azs[count.index], -2, -1)
+      )
+    }))
 }
 
 # dynamic subnet
